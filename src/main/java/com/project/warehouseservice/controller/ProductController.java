@@ -2,10 +2,12 @@ package com.project.warehouseservice.controller;
 
 import com.project.warehouseservice.contracts.ProductCreateRequest;
 import com.project.warehouseservice.contracts.ProductUpdateRequest;
+import com.project.warehouseservice.model.Product;
 import com.project.warehouseservice.model.dto.ProductDTO;
 import com.project.warehouseservice.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,5 +58,13 @@ public class ProductController {
     public ResponseEntity<List<ProductDTO>> searchProduct(@PathVariable("productName") String productName){
         return new ResponseEntity<>(productService.searchProduct(productName), HttpStatus.OK);
     }
-    
+
+    @GetMapping(value = "/retrieveWithPagination/{offset}/{pageSize}")
+    @Operation(summary = "retrieve all product  from database with pagination")
+    public ResponseEntity<Page<Product>> retrieveWithPagination(@PathVariable("offset") int offset, @PathVariable("pageSize") int pageSize){
+        Page<Product> pageProduct = productService.retrieveProductWithPagination(offset,pageSize);
+        return new ResponseEntity<>(pageProduct, HttpStatus.OK);
+    }
+
+
 }
